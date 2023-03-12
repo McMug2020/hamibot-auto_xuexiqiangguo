@@ -234,11 +234,11 @@ if (stop_app2) {
     sleep(random_time(delay_time * 2));
     launch('com.hamibot.hamibot');
     sleep(random_time(delay_time));
-    home();
-    sleep(random_time(delay_time));
 }
 
 // 震动半秒(可选项)
 if (all_completed_Vibrate == "yes") device.vibrate(500);
 toastLog("脚本运行完成");
+sleep(random_time(delay_time));
+if (stop_app2) home();
 exit();
