@@ -11,6 +11,7 @@ var { four_player_count } = hamibot.env;
 var { two_player_count } = hamibot.env;
 var { contest_delay_time } = hamibot.env;
 var { all_completed_Vibrate } = hamibot.env;
+var { stop_app2 } = hamibot.env;
 var delay_time = 1000;
 four_player_count = Number(four_player_count);
 two_player_count = Number(two_player_count);
@@ -197,6 +198,42 @@ if (two_player_battle == "yes") {
     sleep(random_time(delay_time));
     back();
     my_click_clickable("退出");
+}
+
+// 尝试成功点击
+function real_click(obj) {
+    for (let i = 1; i <= 3; i++) {
+        if (obj.click()) { return true; }
+        sleep(300);
+    }
+    click(obj.bounds().centerX(), obj.bounds().centerY());
+    return false;
+}
+/**
+* 结束学习强国APP
+*/
+if (stop_app2) {
+    sleep(random_time(delay_time * 2));
+    var packageName = getPackageName("学习强国");
+    app.openAppSetting(packageName);
+    sleep(2000);
+    text("学习强国").findOne(5000);
+    sleep(1500);
+    let stopbb = textMatches(/(强.停止$|.*停止$|结束运行|停止运行|[Ff][Oo][Rr][Cc][Ee] [Ss][Tt][Oo][Pp])/).findOne();
+    real_click(stopbb);
+    sleep(1000);
+    let surebb = textMatches(/(确定|.*停止.*|[Ff][Oo][Rr][Cc][Ee] [Ss][Tt][Oo][Pp]|O[Kk])/).clickable().findOne(1500);
+    if (!surebb) {
+        back();
+    } else {
+        real_click(surebb);
+    }
+    sleep(1500);
+    back();
+
+    sleep(random_time(delay_time * 2));
+    launch('com.hamibot.hamibot');
+    sleep(random_time(delay_time));
 }
 
 // 震动半秒(可选项)
