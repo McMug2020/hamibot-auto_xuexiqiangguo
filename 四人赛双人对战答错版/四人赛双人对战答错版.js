@@ -234,6 +234,8 @@ if (stop_app2) {
     sleep(random_time(delay_time * 2));
     launch('com.hamibot.hamibot');
     sleep(random_time(delay_time));
+    home();
+    sleep(random_time(delay_time));
 }
 
 // 震动半秒(可选项)
