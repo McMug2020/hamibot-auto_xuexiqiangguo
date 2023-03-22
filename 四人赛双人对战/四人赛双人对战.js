@@ -48,6 +48,7 @@ function check_set_env(whether_improve_accuracy, AK, SK) {
  * 获取配置参数及本地存储数据
  */
 // 基础数据
+var { new_hami } = hamibot.env;
 var { delay_time } = hamibot.env;
 var { four_player_battle } = hamibot.env;
 var { two_player_battle } = hamibot.env;
