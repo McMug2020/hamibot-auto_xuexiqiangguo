@@ -5,6 +5,7 @@ auto.waitFor();
  * 获取配置参数及本地存储数据
  */
 // 基础数据
+var { new_hami } = hamibot.env;
 var { four_player_battle } = hamibot.env;
 var { two_player_battle } = hamibot.env;
 var { four_player_count } = hamibot.env;
@@ -27,8 +28,9 @@ function random_time(time) {
 }
 
 sleep(random_time(delay_time));
-launch('com.hamibot.hamibot');
-textMatches(/Hamibot|日志/).waitFor();
+if (new_hami) launch('com.dingdin.dingdio');
+else launch('com.hamibot.hamibot');
+textMatches(/Hamibot|蜜瓜软件|日志/).waitFor();
 toastLog("答错脚本正在运行");
 sleep(random_time(delay_time));
 
@@ -232,7 +234,8 @@ if (stop_app2) {
     back();
 
     sleep(random_time(delay_time * 2));
-    launch('com.hamibot.hamibot');
+    if (new_hami) launch('com.dingdin.dingdio');
+    else launch('com.hamibot.hamibot');
     sleep(random_time(delay_time));
 }
 
