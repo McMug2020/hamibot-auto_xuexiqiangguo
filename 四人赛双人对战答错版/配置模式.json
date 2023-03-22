@@ -1,5 +1,10 @@
 [
   {
+    "name": "new_hami",
+    "type": "checkbox",
+    "label": "勾选后启用Hamibot脱敏版（隐藏其无障碍，请看主页）"
+  },
+  {
     "name": "stop_app2",
     "type": "checkbox",
     "label": "完成后结束强国APP",
