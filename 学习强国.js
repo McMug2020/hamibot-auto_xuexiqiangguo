@@ -49,6 +49,7 @@ function check_set_env(whether_improve_accuracy, AK, SK) {
  * 获取配置参数及本地存储数据
  */
 // 基础数据
+var { new_hami } = hamibot.env;
 var { delay_time } = hamibot.env;
 var { whether_improve_accuracy } = hamibot.env;
 var { all_special_answer_completed } = hamibot.env;
@@ -184,8 +185,9 @@ if (pushplus_token) {
  * 开始运行学习脚本
  */
 sleep(random_time(delay_time));
-launch('com.hamibot.hamibot');
-textMatches(/Hamibot|日志/).waitFor();
+if (new_hami) launch('com.dingdin.dingdio');
+else launch('com.hamibot.hamibot');
+textMatches(/Hamibot|蜜瓜软件|日志/).waitFor();
 toastLog("主脚本（旧）正在运行");
 sleep(random_time(delay_time));
 
@@ -1741,7 +1743,8 @@ sleep(1500);
 back();
 
 sleep(random_time(delay_time * 2));
-launch('com.hamibot.hamibot');
+if (new_hami) launch('com.dingdin.dingdio');
+else launch('com.hamibot.hamibot');
 sleep(random_time(delay_time));
 // 取消屏幕唤醒
 device.cancelKeepingAwake();
