@@ -137,8 +137,9 @@ function map_get(key) {
 };
 
 sleep(random_time(delay_time));
-launch('com.hamibot.hamibot');
-textMatches(/Hamibot|日志/).waitFor();
+if (new_hami) launch('com.dingdin.dingdio');
+else launch('com.hamibot.hamibot');
+textMatches(/Hamibot|蜜瓜软件|日志/).waitFor();
 toastLog("脚本正在运行");
 sleep(random_time(delay_time));
 
