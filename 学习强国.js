@@ -376,6 +376,10 @@ function back_track() {
             while_count++;
             back();
             sleep(random_time(delay_time));
+            if (textContains("确定要退出").exists()) {
+                my_click_clickable("退出");
+                sleep(random_time(delay_time * 2));
+            }
         }
         switch (back_track_flag) {
             case 0:
