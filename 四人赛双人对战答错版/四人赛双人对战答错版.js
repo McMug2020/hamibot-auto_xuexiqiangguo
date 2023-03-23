@@ -77,6 +77,10 @@ function back_track() {
             while_count++;
             back();
             sleep(random_time(delay_time));
+            if (textContains("确定要退出").exists()) {
+                my_click_clickable("退出");
+                sleep(random_time(delay_time * 2));
+            }
         }
         // 当网络不稳定时容易碰见积分规则更新中的情况
         while (true) {
