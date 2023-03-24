@@ -1,7 +1,9 @@
 # 脚本安装和题库更新
 **Hamibot自用学习主脚本参考** 适配定时任务，新增pushplus重复推送校验、低电量微信推送和完成后结束APP（针对备用机定时任务，可在间隔时间段设置2个定时任务以确保当天学习圆满）
+
 https://hamibot.com/marketplace/gtf52?invite=ADfZFZnW31U9Xrnu7xy8Ns3U
-bug修正：因device.keepScreenDim();本来就有点亮屏幕的功能，为了兼容性问题，所以取消开屏解锁选项，**设备直接设置成无锁屏就可以开屏点亮**
+
+bug修正：因device.keepScreenDim();本来就有点亮屏幕的功能，为了兼容性问题，所以取消开屏解锁选项，设备直接设置成无锁屏就可以开屏点亮
 
 **新增：Hamibot脱敏版（隐藏无障碍） https://www.123pan.com/s/D1WuVv-hd8Kh.html 提取码:1999**
 
