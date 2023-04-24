@@ -1,28 +1,31 @@
-# 脚本安装运行及题库更新
-**Hamibot自用学习主脚本参考**
+#  [提示] 脚本安装运行及题库更新
+## Hamibot自用学习主脚本参考
 
-适配定时任务，新增pushplus重复推送校验、低电量微信推送和完成后结束APP（针对备用机定时任务，可在间隔时间段设置2个定时任务以确保当天学习圆满）
+**不要用最新版QG，切记隐藏应用列表（已root刷面具的设备），也可采用更隐蔽更有效的方式，方法请自行百度。风浪太大，各安天命。**
 
 **脚本安装地址 
 https://hamibot.com/marketplace/gtf52?invite=ADfZFZnW31U9Xrnu7xy8Ns3U**
 
+适配定时任务，新增pushplus重复推送校验、低电量微信推送和完成后结束APP（针对备用机定时任务，可在间隔时间段设置2个定时任务以确保当天学习圆满）
 bug修正：因device.keepScreenDim();本来就有点亮屏幕的功能，为了兼容性问题，所以取消开屏解锁选项，设备直接设置成无锁屏就可以开屏点亮
 
 **新增：Hamibot脱敏版（隐藏无障碍） https://www.123pan.com/s/D1WuVv-hd8Kh.html 提取码:1999**
 
 顺畅运行脚本需 [學習强国v2.22.0(改版本号)]（系统版本太高安装不了QG旧版本，可用VMOS+64位版安卓7.1+Hamibot1.4.3+qg2.22改版本号，可多开；具体方法可搜索GitHub页面上的相关议题）
-
 系统版本太高了v2.22.0旧版可能会无法安装或显示空白，隐藏无障碍后，其实用v2.33.0也行。
 
 **v2.22.0下载（请忽略压缩包文件名） https://www.123pan.com/s/D1WuVv-5trKh.html 提取码:7777**
 
 如登录时提示 “当前使用功能人数过多”，需要切换账号可以用LSPosed非残 隐藏对无障碍的使用；单账号只需要初次登录前完全关闭Hamibot（取消其无障碍授权）就行了；——推荐直接用Hamibot脱敏版
 
+**自动跑跑，见 备用机（LG V35洋垃圾）学习心得分享**
+https://github.com/dundunnp/auto_xuexiqiangguo/issues/673
+
+## 题库更新
 **自建题库，每周六自动检测更新（如有）**
 https://github.com/McMug2020/XXQG_TiKu
 
-**自动跑跑，见 备用机（LG V35洋垃圾）学习心得分享**
-https://github.com/dundunnp/auto_xuexiqiangguo/issues/673
+因脚本采用本地题库和在线题库结合的检索方式，所以本地题库适时更新，不会太及时。
 
 # Hamibot-Auto学习强国
 <p>Hamibot-Auto学习强国 是一款自动化学习工具 forked from <a href="https://github.com/dundunnp/auto_xuexiqiangguo/">dundunnp</a>大神</p>
