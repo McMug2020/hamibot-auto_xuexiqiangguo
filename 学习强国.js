@@ -316,6 +316,30 @@ function refresh(orientation) {
 }
 
 /**
+ * 去省份模块
+ */
+function go_province() {
+    sleep(random_time(delay_time));
+    className("android.view.ViewGroup").depth(15).waitFor();
+    sleep(random_time(delay_time));
+    // 判断省份模块位置
+    province_list = ["河北", "山西", "黑龙江", "吉林", "辽宁", "江苏", "浙江", "安徽", "福建", "江西", "山东", "河南", "湖北", "湖南", "广东", "海南", "四川", "贵州", "云南", "陕西", "甘肃", "青海", "台湾", "内蒙古", "广西", "西藏", "宁夏", "新疆", "北京", "天津", "上海", "重庆", "香港", "澳门"];
+    index_province = -1;
+    var list = className("android.view.ViewGroup").depth(15).findOnce(2);
+    for (var i = 0; i < list.childCount(); i++) {
+        if (province_list.indexOf(list.child(i).child(0).text().trim()) != -1) {
+            index_province = i;
+            break;
+        }
+    }
+    if (index_province == -1) {
+        toastLog('没找到你的省份模块，请在github上提出issue');
+        exit();
+    }
+    className("android.view.ViewGroup").depth(15).findOnce(2).child(index_province).click();
+}
+
+/**
  * pushplus推送通知到微信
  */
 function push_weixin_message(account) {
@@ -389,13 +413,7 @@ function back_track() {
                 var home_bottom = id("home_bottom_tab_icon_large").findOne().bounds();
                 click(home_bottom.centerX(), home_bottom.centerY());
                 // 去省份模块
-                className("android.view.ViewGroup").depth(15).waitFor();
-                sleep(random_time(delay_time));
-                if (text("亮点").exists()) {
-                    className("android.view.ViewGroup").depth(15).findOnce(2).child(4).click();
-                } else {
-                    className("android.view.ViewGroup").depth(15).findOnce(2).child(3).click();
-                }
+                go_province();
                 break;
             case 1:
                 break;
@@ -486,14 +504,7 @@ sleep(random_time(delay_time));
 
 if (!finish_dict['本地频道'][0] || !finish_dict['我要选读文章'][0]) {
     // 去省份模块
-    sleep(random_time(delay_time));
-    className("android.view.ViewGroup").depth(15).waitFor();
-    sleep(random_time(delay_time));
-    if (text("亮点").exists()) {
-        className("android.view.ViewGroup").depth(15).findOnce(2).child(4).click();
-    } else {
-        className("android.view.ViewGroup").depth(15).findOnce(2).child(3).click();
-    }
+    go_province();
 }
 
 /*
