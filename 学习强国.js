@@ -529,7 +529,7 @@ var back_track_flag = 0;
  */
 
 // 打开电台广播
-if (!finish_dict['视听学习时长'][0] && !finish_dict['我要选读文章'][0]) {
+if (!finish_dict['我要视听学习'][0] && !finish_dict['我要选读文章'][0]) {
     sleep(random_time(delay_time));
     my_click_clickable("电台");
     sleep(random_time(delay_time));
@@ -595,7 +595,7 @@ while (count < 6 - finish_dict['我要选读文章'][1] / 2) {
 back_track_flag = 1;
 
 // 关闭电台广播
-if (!finish_dict['视听学习时长'][0] && !finish_dict['我要选读文章'][0]) {
+if (!finish_dict['我要视听学习'][0] && !finish_dict['我要选读文章'][0]) {
     if (!id("comm_head_title").exists()) back_track();
     sleep(random_time(delay_time));
     my_click_clickable("电台");
@@ -614,10 +614,17 @@ if (!finish_dict['视听学习时长'][0] && !finish_dict['我要选读文章'][
     sleep(random_time(delay_time));
 }
 
+// 重新获取视听学习剩下的分数
+var back_track_flag = 2;
+back_track();
+var finish_dict = get_finish_dict();
+back_track_flag = 1;
+sleep(random_time(delay_time));
+
 /*
- **********视听学习、听学习时长*********
+ **********我要视听学习*********
  */
-if (!finish_dict['视听学习'][0] && !finish_dict['视听学习时长'][0]) {
+if (!finish_dict['我要视听学习'][0]) {
     if (!id("comm_head_title").exists()) back_track();
     my_click_clickable("百灵");
     sleep(random_time(delay_time / 2));
@@ -638,8 +645,8 @@ if (!finish_dict['视听学习'][0] && !finish_dict['视听学习时长'][0]) {
     sleep(random_time(delay_time));
     if (text("继续播放").exists()) click("继续播放");
     if (text("刷新重试").exists()) click("刷新重试");
-    var completed_watch_count = finish_dict['视听学习'][1];
-    while (completed_watch_count < 6) {
+    var completed_watch_count = finish_dict['我要视听学习'][1];
+    while (completed_watch_count < 12) {
         sleep(random_time(delay_time / 2));
         className("android.widget.LinearLayout").clickable(true).depth(16).waitFor();
         // 当前视频的时间长度
@@ -662,17 +669,10 @@ if (!finish_dict['视听学习'][0] && !finish_dict['视听学习时长'][0]) {
     back();
 }
 
-// 过渡
-sleep(random_time(delay_time / 2));
-my_click_clickable("我的");
-sleep(random_time(delay_time / 2));
-my_click_clickable("学习积分");
-sleep(random_time(delay_time / 2));
-
 /*
  *********************竞赛部分********************
  */
-back_track_flag = 2;
+var back_track_flag = 2;
 
 /**
  * 选出选项
@@ -1272,7 +1272,7 @@ if (all_special_answer_completed == "no") {
     all_special_answer_completed = storage.get("all_special_answer_completed_storage");
 }
 
-if (finish_dict['专项答题'][1] == 0) {
+if (typeof (finish_dict['专项答题']) != "undefined" && finish_dict['专项答题'][1] == 0) {
     sleep(random_time(delay_time));
     if (!className("android.view.View").depth(22).text("学习积分").exists()) back_track();
     entry_model('专项答题');
@@ -1375,7 +1375,7 @@ if (finish_dict['专项答题'][1] == 0) {
 /*
  **********挑战答题*********
  */
-if (!finish_dict['挑战答题'][0]) {
+if (typeof (finish_dict['挑战答题']) != "undefined" && !finish_dict['挑战答题'][0]) {
     sleep(random_time(delay_time));
 
     if (!className("android.view.View").depth(22).text("学习积分").exists()) back_track();
@@ -1496,7 +1496,7 @@ function do_contest() {
 /*
  **********四人赛*********
  */
-if (!finish_dict['四人赛'][0] && finish_dict['四人赛'][1] < 3) {
+if (typeof (finish_dict['四人赛']) != "undefined" && !finish_dict['四人赛'][0] && finish_dict['四人赛'][1] < 3) {
     log("四人赛");
     sleep(random_time(delay_time));
 
@@ -1522,7 +1522,7 @@ if (!finish_dict['四人赛'][0] && finish_dict['四人赛'][1] < 3) {
 /*
  **********双人对战*********
  */
-if (!finish_dict['双人对战'][0] && finish_dict['双人对战'][1] < 1) {
+if (typeof (finish_dict['双人对战']) != "undefined" && !finish_dict['双人对战'][0] && finish_dict['双人对战'][1] < 1) {
     log("双人对战");
     sleep(random_time(delay_time));
 
@@ -1697,7 +1697,7 @@ if (!finish_dict['发表观点'][0] && whether_complete_speech == "yes") {
 
 sleep(random_time(delay_time * 4));
 // 回到积分页
-back_track_flag = 2;
+var back_track_flag = 2;
 back_track();
 
 if (pushplus_token) {
