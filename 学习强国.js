@@ -52,7 +52,6 @@ function check_set_env(whether_improve_accuracy, AK, SK) {
 var { new_hami } = hamibot.env;
 var { delay_time } = hamibot.env;
 var { whether_improve_accuracy } = hamibot.env;
-var { all_special_answer_completed } = hamibot.env;
 var { whether_complete_subscription } = hamibot.env;
 var { whether_complete_speech } = hamibot.env;
 var { pushplus_token } = hamibot.env;
@@ -369,10 +368,6 @@ function send_pushplus() {
         var title = option.child(0).text();
         var score = option.child(3).child(0).text();
         var total = option.child(3).child(2).text().match(/\d+/g)[0];
-        if (title == "专项答题") {
-            if (all_special_answer_completed == "no" || score > 5) { total = 10; }
-            else { total = 5; }
-        }
         let percent = (Number(score) / Number(total) * 100).toFixed() + '%';
         let detail = title + ": " + score + "/" + total;
         content_str += '<div class="item"><div class="bar"><div style="width: ' + percent + ';"></div></div><span>' + detail + '</span></div>';
@@ -1248,138 +1243,25 @@ if (!finish_dict['每日答题'][0]) {
 }
 
 /*
-**********每周答题*********
-*/
+ **********每周答题*********
+ */
 var restart_flag = 1;
 // 是否重做过，如果重做，也即错了，则换用精度更高的百度ocr
 var if_restart_flag = false;
 
 /*
-**********专项答题*********
-*/
-// 保存本地变量，如果已经做完之前的所有题目则跳过
-if (!storage.contains("all_special_answer_completed_storage")) {
-    storage.put("all_special_answer_completed_storage", "no");
-}
-
-// 保存本地变量，改变存储上次搜索未完成的题目所需时间，用于加速搜索
-if (!storage.contains("quick_search_special_answer_time_storage")) {
-    storage.put("quick_search_special_answer_time_storage", 0);
-}
-
-// 当该账号已完成专项答题，但配置没有转为yes时，也自动跳过
-if (all_special_answer_completed == "no") {
-    all_special_answer_completed = storage.get("all_special_answer_completed_storage");
-}
-
-if (typeof (finish_dict['专项答题']) != "undefined" && finish_dict['专项答题'][1] == 0) {
-    sleep(random_time(delay_time));
-    if (!className("android.view.View").depth(22).text("学习积分").exists()) back_track();
-    entry_model('专项答题');
-    // 等待列表加载
-    className("android.view.View").clickable(true).depth(23).waitFor();
-    // 打开第一个出现未完成作答的题目
-    // 第一个未完成作答的索引
-    var special_i = 0;
-    // 是否找到未作答的标志
-    var special_flag = false;
-    // 是否答题的标志
-    var is_answer_special_flag = false;
-    // 均速搜索次数（需要根据此更新加速搜索次数）
-    var comm_search_special_answer_time = 0
-    // 加速搜索次数
-    var quick_search_special_answer_time = storage.get("quick_search_special_answer_time_storage");
-
-    // 如果之前的答题全部完成则不向下搜索
-    if (all_special_answer_completed == "yes") {
-        special_flag = true;
-    }
-    while (!special_flag) {
-        if (text("开始答题").exists()) {
-            special_flag = true;
-            break;
-        }
-        while (text("继续答题").findOnce(special_i)) {
-            if (text("继续答题").findOnce(special_i).parent().childCount() < 3) {
-                special_flag = true;
-                break;
-            } else {
-                special_i++;
-            }
-        }
-        // 根据上次搜索时间 加速搜索
-        while (quick_search_special_answer_time > 0) {
-            swipe(device.width / 2, (device.height * 13) / 15, device.width / 2, (device.height * 2) / 15, 100);
-            quick_search_special_answer_time--;
-        }
-        if (!special_flag) {
-            refresh(true);
-            comm_search_special_answer_time++;
-        }
-        // 如果搜索到底部
-        if (text("您已经看到了我的底线").exists()) {
-            storage.put("all_special_answer_completed_storage", "yes");
-            break;
-        }
-    }
-    sleep(random_time(delay_time * 2));
-    // 更新加速搜索次数
-    if (storage.get("quick_search_special_answer_time_storage") == 0) {
-        // 如果是第一次更新
-        storage.put("quick_search_special_answer_time_storage", comm_search_special_answer_time);
-    } else {
-        var tmp = storage.get("quick_search_special_answer_time_storage");
-        storage.put("quick_search_special_answer_time_storage", tmp + comm_search_special_answer_time);
-    }
-
-    if (text("开始答题").exists() || text("您已经看到了我的底线").exists()) {
-        text("开始答题").findOne().click();
-        is_answer_special_flag = true;
-        // 总题数
-        className("android.view.View").depth(24).waitFor();
-        sleep(random_time(delay_time));
-        // 为兼容新版本新题只有5题，老版有10题
-        var num_string = className("android.view.View").depth(24).findOnce(1).text();
-        var total_question_num = parseInt(num_string.slice(num_string.indexOf("/") + 1));
-        do_periodic_answer(total_question_num);
-    } else if (text("继续答题").exists()) {
-        text("继续答题").findOnce(special_i).click();
-        // 等待题目加载
-        sleep(random_time(delay_time));
-        is_answer_special_flag = true;
-        className("android.view.View").depth(24).waitFor();
-        sleep(random_time(delay_time));
-        var num_string = className("android.view.View").depth(24).findOnce(1).text();
-        // 已完成题数
-        var completed_question_num = parseInt(num_string);
-        // 总题数
-        var total_question_num = parseInt(num_string.slice(num_string.indexOf("/") + 1));
-        do_periodic_answer(total_question_num - completed_question_num + 1);
-    } else {
-        sleep(random_time(delay_time));
-        className("android.view.View").clickable(true).depth(23).waitFor();
-        className("android.view.View").clickable(true).depth(23).findOne().click();
-    }
-
-    if (is_answer_special_flag) {
-        // 点击退出
-        sleep(random_time(delay_time));
-        className("android.view.View").clickable(true).depth(20).waitFor();
-        className("android.view.View").clickable(true).depth(20).findOne().click();
-        sleep(random_time(delay_time));
-        className("android.view.View").clickable(true).depth(23).waitFor();
-        className("android.view.View").clickable(true).depth(23).findOne().click();
-    }
-}
+ **********专项答题*********
+ */
 
 /*
  **********挑战答题*********
- */
-if (typeof (finish_dict['挑战答题']) != "undefined" && !finish_dict['挑战答题'][0]) {
+*/
+var date = new Date();
+if (date.getDay() == 2 || date.getDay() == 5 || date.getDay() == 0 && !finish_dict['趣味答题'][0]) {
     sleep(random_time(delay_time));
 
     if (!className("android.view.View").depth(22).text("学习积分").exists()) back_track();
-    entry_model('挑战答题');
+    entry_model('趣味答题');
     // 点击强国总题库
     text("挑战答题").waitFor();
     sleep(random_time(delay_time / 2))
@@ -1493,26 +1375,47 @@ function do_contest() {
     }
 }
 
+//答错
+function do_it() {
+    while (!text("开始").exists());
+    while (!text("继续挑战").exists()) {
+        sleep(random(8000, 12000));
+        // 随机选择
+        try {
+            var options = className("android.widget.RadioButton").depth(32).find();
+            var select = random(0, options.length - 1);
+            className("android.widget.RadioButton").depth(32).findOnce(select).click();
+        } catch (error) {
+        }
+        while (!textMatches(/第\d题/).exists() && !text("继续挑战").exists() && !text("开始").exists());
+    }
+}
+
 /*
  **********四人赛*********
  */
-if (typeof (finish_dict['四人赛']) != "undefined" && !finish_dict['四人赛'][0] && finish_dict['四人赛'][1] < 3) {
+var date = new Date();
+if (date.getDay() == 1 || date.getDay() == 4 && !finish_dict['趣味答题'][0]) {
     log("四人赛");
     sleep(random_time(delay_time));
 
     if (!className("android.view.View").depth(22).text("学习积分").exists()) back_track();
-    entry_model('四人赛');
+    entry_model('趣味答题');
 
-    for (var i = 0; i < 2; i++) {
-        sleep(random_time(delay_time));
-        my_click_clickable("开始比赛");
-        do_contest();
-        if (i == 0) {
-            sleep(random_time(delay_time * 2));
-            my_click_clickable("继续挑战");
-            sleep(random_time(delay_time));
-        }
-    }
+    sleep(random_time(delay_time));
+    my_click_clickable("开始比赛");
+    do_contest();
+    sleep(random_time(delay_time * 2));
+    my_click_clickable("继续挑战");
+    sleep(random_time(delay_time));
+    toast("“四人赛”第2局进入答错模式");
+    toast("“四人赛”第2局进入答错模式");
+    sleep(random_time(delay_time));
+    my_click_clickable("开始比赛");
+    toast("“四人赛”第2局进入答错模式");
+    toastLog("“四人赛”第2局进入答错模式");
+    do_it();
+
     sleep(random_time(delay_time * 2));
     back();
     sleep(random_time(delay_time));
@@ -1522,12 +1425,13 @@ if (typeof (finish_dict['四人赛']) != "undefined" && !finish_dict['四人赛'
 /*
  **********双人对战*********
  */
-if (typeof (finish_dict['双人对战']) != "undefined" && !finish_dict['双人对战'][0] && finish_dict['双人对战'][1] < 1) {
+var date = new Date();
+if (date.getDay() == 3 || date.getDay() == 6 && !finish_dict['趣味答题'][0]) {
     log("双人对战");
     sleep(random_time(delay_time));
 
     if (!className("android.view.View").depth(22).text("学习积分").exists()) back_track();
-    entry_model('双人对战');
+    entry_model('趣味答题');
 
     // 点击随机匹配
     text("随机匹配").waitFor();
