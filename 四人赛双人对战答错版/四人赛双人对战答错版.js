@@ -149,13 +149,14 @@ function do_it() {
 }
 
 /*
-**********四人赛*********
-*/
-if (four_player_battle == "yes") {
+ **********四人赛*********
+ */
+var date = new Date();
+if (date.getDay() == 1 || date.getDay() == 4 && four_player_battle == "yes") {
     sleep(random_time(delay_time));
 
     if (!className("android.view.View").depth(22).text("学习积分").exists()) back_track();
-    entry_model("四人赛");
+    entry_model("趣味答题");
 
     for (var i = 0; i < four_player_count; i++) {
         sleep(random_time(delay_time));
@@ -174,13 +175,14 @@ if (four_player_battle == "yes") {
 }
 
 /*
-**********双人对战*********
-*/
-if (two_player_battle == "yes") {
+ **********双人对战*********
+ */
+var date = new Date();
+if (date.getDay() == 3 || date.getDay() == 6 && two_player_battle == "yes") {
     sleep(random_time(delay_time));
 
     if (!className("android.view.View").depth(22).text("学习积分").exists()) back_track();
-    entry_model("双人对战");
+    entry_model("趣味答题");
 
     for (var i = 0; i < two_player_count; i++) {
         // 点击随机匹配
@@ -204,6 +206,11 @@ if (two_player_battle == "yes") {
     sleep(random_time(delay_time));
     back();
     my_click_clickable("退出");
+}
+
+var date = new Date();
+if (date.getDay() == 2 || date.getDay() == 5 || date.getDay() == 0) {
+    toastLog("今日趣味答题为“挑战答题”，请从“我要答题”进入手动操作");
 }
 
 // 尝试成功点击
